@@ -1,0 +1,7 @@
+mongodb+srv://apalac99:<db_password>@cluster0.obz2e.mongodb.net/      HSFIAsCBogxNlvjM
+mongodb+srv://apalac99:HSFIAsCBogxNlvjM@cluster0.obz2e.mongodb.net/
+
+Despliega tu aplicación y prueba el endpoint GET /students/chess.
+
+npm init -y
+npm install express mongoose dotenv
