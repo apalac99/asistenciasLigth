@@ -5,3 +5,94 @@ Despliega tu aplicación y prueba el endpoint GET /students/chess.
 
 npm init -y
 npm install express mongoose dotenv
+
+
+
+npm install
+node server.js
+
+https://asistenciasligth.onrender.com
+https://asistenciasligth.onrender.com/students/chess    GET 
+
+Mi app
+
+app
+  - models
+    - - Students.js
+  - package.json
+  - server.js
+  - .env
+-------------------------
+  Students.js 
+
+  const mongoose = require('mongoose');
+
+const studentSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  course: { type: String, required: true },
+  attendance: [Boolean], // Registro de asistencias
+  absences: { type: Number, default: 0 }, // Número de faltas
+});
+
+module.exports = mongoose.model('Student', studentSchema);
+
+-----------------------------------
+
+package.json
+
+{
+    "name": "asistencias-app",
+    "version": "1.0.0",
+    "description": "Aplicación para control de asistencias en un colegio",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "mongoose": "^8.10.1"
+    },
+    "engines": {
+        "node": "20.x"
+    }
+}
+
+-----------------------------------
+
+server.js
+
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const Student = require('./models/Student');
+
+const app = express();
+app.use(express.json());
+
+// Conexión a MongoDB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('Conectado a MongoDB'))
+  .catch(err => console.error('Error al conectar a MongoDB:', err));
+
+// Endpoint para listar estudiantes que estudian ajedrez
+app.get('/students/chess', async (req, res) => {
+  try {
+    const chessStudents = await Student.find({ course: 'Ajedrez' });
+    res.json(chessStudents);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener los estudiantes' });
+  }
+});
+
+// Iniciar el servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
+
+---------------------------
+
+.env
+MONGO_URI=mongodb+srv://apalac99:<mi clave>@cluster0.obz2e.mongodb.net/ijr
+PORT=3000
